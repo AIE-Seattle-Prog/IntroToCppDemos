@@ -1,0 +1,11 @@
+.vs/
+.vscode/
+.rider/
+
+Debug/
+Release/
+x64/
+
+bin/
+
+*.user
