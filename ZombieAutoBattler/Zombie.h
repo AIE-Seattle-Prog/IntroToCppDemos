@@ -5,17 +5,32 @@
 class Zombie
 {
 	int Health;
+
+public:
 	int AttackPower;
 	int Defense;
 
-public:
+	int MaxHealth;
+
 	std::string Name;
+	bool IsPlayer;
 
 	Zombie();
 	Zombie(int startHP, int startATK, int startDEF);
 
+	// Rule 0/3/5
+	// 
+	// destructor
+	// copy constructor
+	// copy assignment
+	// 
+	// move constructor
+	// move assignment
+
 	// Provides read-only access to health
 	int GetHealth();
+
+	void Heal(int healing);
 
 	// Attack another zombie
 	// (will call TakeDamage to apply damage)

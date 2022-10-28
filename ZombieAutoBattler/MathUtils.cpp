@@ -24,3 +24,17 @@ int RandomRange(int minIncl, int maxExcl)
 
 	// TODO: look into a better random
 }
+
+int Clamp(int value, int min, int max)
+{
+	if (value < min)
+	{
+		value = min;
+	}
+	else if (value > max)
+	{
+		value = max;
+	}
+
+	return value;
+}
