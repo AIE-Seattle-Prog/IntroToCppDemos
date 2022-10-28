@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class Zombie
 {
 	int Health;
@@ -7,6 +9,8 @@ class Zombie
 	int Defense;
 
 public:
+	std::string Name;
+
 	Zombie();
 	Zombie(int startHP, int startATK, int startDEF);
 

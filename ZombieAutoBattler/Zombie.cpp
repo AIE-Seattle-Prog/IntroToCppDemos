@@ -23,5 +23,14 @@ int Zombie::GetHealth()
 
 void Zombie::Attack(Zombie * victim)
 {
-	std::cout << "TODO: ATTACK!" << std::endl;
+	std::cout << "Zombie attacks for " << AttackPower << " DMG" << std::endl;
+	victim->TakeDamage(AttackPower);
+}
+
+void Zombie::TakeDamage(int damageDealt)
+{
+	int realDamage = damageDealt - Defense;
+	Health -= realDamage;
+	std::cout << "Zombie takes " << realDamage << " DMG" << std::endl;
+	std::cout << "Zombie has " << Health << " HP remaining!" << std::endl;
 }
