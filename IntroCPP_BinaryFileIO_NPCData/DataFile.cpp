@@ -74,23 +74,23 @@ void DataFile::Load(string filename)
 		int ageSize = 0;
 		int width = 0, height = 0, format = 0, imageSize = 0;
 
-		infile.read((char*)&width, sizeof(int));
-		infile.read((char*)&height, sizeof(int));
+		infile.read((char*)&width, sizeof(int));		// FIXED
+		infile.read((char*)&height, sizeof(int));		// FIXED
 
 		imageSize = sizeof(Color) * width * height;
 
-		infile.read((char*)&nameSize, sizeof(int));
-		infile.read((char*)&ageSize, sizeof(int));
+		infile.read((char*)&nameSize, sizeof(int));		// FIXED
+		infile.read((char*)&ageSize, sizeof(int));		// FIXED
 
 		char* imgdata = new char[imageSize];
-		infile.read(imgdata, imageSize);
+		infile.read(imgdata, imageSize);				// VARIABLE
 
 		Image img = LoadImageEx((Color*)imgdata, width, height);
 		char* name = new char[nameSize];
 		int age = 0;
 				
-		infile.read((char*)name, nameSize);
-		infile.read((char*)&age, ageSize);
+		infile.read((char*)name, nameSize);				// VARIABLE
+		infile.read((char*)&age, ageSize);				// VARIABLE
 
 		Record* r = new Record();
 		r->image = img;
