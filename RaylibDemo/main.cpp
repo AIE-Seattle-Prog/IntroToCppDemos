@@ -23,6 +23,8 @@
 
 #include "raylib-cpp.hpp"
 
+#include "Grid.h"
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -33,14 +35,13 @@ int main()
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    raylib::Window window(screenWidth, screenHeight, "Hello Raylib-cpp");
+    auto rect = Rectangle{ 5,2,3,6 };
+
+    auto screenSize = Grid::GetGridWorldSize(9, 16, 16*3);
+
+    raylib::Window window(screenSize.x, screenSize.y, "Hello Raylib-cpp");
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
-
-    raylib::Vector2 pos = {0, 0};
-    raylib::Vector2 vel = {0, 0};
-
-    raylib::Vector2 newPos = pos + vel;
 
     //--------------------------------------------------------------------------------------
 
@@ -57,8 +58,6 @@ int main()
         BeginDrawing();
 
         window.ClearBackground(RAYWHITE);
-
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
