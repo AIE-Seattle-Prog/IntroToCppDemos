@@ -19,7 +19,7 @@ void SetTarget(GameObject * ptrToTarget)
 
 void SetOwningPlayer(Player & owner)
 {
-
+	
 }
 
 int main()
