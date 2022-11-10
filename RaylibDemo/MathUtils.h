@@ -1,8 +1,12 @@
 #pragma once
 
-inline int Clamp(int value, int min, int max)
+class MathU
 {
-	if (value < min) return min;
-	if (value > max) return max;
-	return value;
-}
+public:
+	int static Clamp(int value, int min, int max)
+	{
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
+	}
+};

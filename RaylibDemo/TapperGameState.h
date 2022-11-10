@@ -5,7 +5,11 @@
 #include "Vector2Int.h"
 #include "GameState.h"
 
-using raylib::Vector2;
+struct RBeerLane
+{
+	Vector2Int position;
+	int length;
+};
 
 class TapperGameState : public GameState
 {
@@ -18,8 +22,4 @@ protected:
 	void OnDraw() override;
 };
 
-struct RBeerLane
-{
-	Vector2Int position;
-	int length;
-};
+
