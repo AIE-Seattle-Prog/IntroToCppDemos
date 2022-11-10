@@ -1,4 +1,6 @@
-﻿int input = 5;
+﻿Dictionary<int, string> vals;
+
+int input = 5;
 
 if(input > 3)
 {

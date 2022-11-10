@@ -26,6 +26,8 @@
 #include "Grid.h"
 #include "MathUtils.h"
 
+#include "TapperGameState.h"
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -44,7 +46,8 @@ int main()
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
 
-    MathU::Clamp(5, 0, 10);
+    TapperGameState tapperGS;
+    GameState * currentGameState = &tapperGS;
 
     //--------------------------------------------------------------------------------------
 
@@ -53,7 +56,7 @@ int main()
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        currentGameState->Update();
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -61,6 +64,8 @@ int main()
         BeginDrawing();
 
         window.ClearBackground(RAYWHITE);
+
+        currentGameState->Draw();
 
         EndDrawing();
         //----------------------------------------------------------------------------------

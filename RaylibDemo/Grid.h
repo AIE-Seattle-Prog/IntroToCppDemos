@@ -12,8 +12,11 @@ public:
 	int tileSize = 16;
 
 	Vector2Int GetTilePosition(Vector2 worldPosition) const;
+	Vector2 GetWorldPosition(Vector2Int tilePosition) const;
 
 	Vector2Int GetGridWorldSize() const;
 
 	static Vector2Int GetGridWorldSize(int rows, int columns, int tileSize);
+
+	void DrawDebugLines();
 };
