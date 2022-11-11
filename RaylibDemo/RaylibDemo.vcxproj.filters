@@ -27,6 +27,9 @@
     <ClCompile Include="RBeer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Patron.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RBeer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Patron.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

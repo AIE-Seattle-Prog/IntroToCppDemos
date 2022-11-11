@@ -2,7 +2,7 @@
 
 void RBeer::Update()
 {
-	position.x += speed * GetFrameTime();
+	position.x -= speed * GetFrameTime();
 }
 
 void RBeer::Draw()

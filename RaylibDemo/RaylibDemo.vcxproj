@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Patron.cpp" />
     <ClCompile Include="RBeer.cpp" />
     <ClCompile Include="TapperGameState.cpp" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="MathUtils.h" />
+    <ClInclude Include="Patron.h" />
     <ClInclude Include="RBeer.h" />
     <ClInclude Include="TapperGameState.h" />
     <ClInclude Include="Vector2Int.h" />

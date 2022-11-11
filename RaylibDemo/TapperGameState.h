@@ -8,6 +8,7 @@
 #include "Grid.h"
 
 #include "RBeer.h"
+#include "Patron.h"
 #include "GameState.h"
 
 struct RBeerLane
@@ -26,17 +27,19 @@ class TapperGameState : public GameState
 	static const int LANE_COUNT = 4;
 	RBeerLane lanes[LANE_COUNT];
 	std::vector<RBeer *> rbeers;
+	std::vector<Patron *> patrons;
 
-	float rbeerSpawnTimer;
+	float patronSpawnTimer;
 
 protected:
 	void OnUpdate() override;
 	void OnDraw() override;
 
 public:
-	TapperGameState();
 
-	float rbeerSpawnInterval = 3.0f;
+	float patronSpawnInterval = 3;
+
+	TapperGameState();
 };
 
 
