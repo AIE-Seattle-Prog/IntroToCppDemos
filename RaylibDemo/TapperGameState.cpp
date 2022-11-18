@@ -17,6 +17,21 @@ TapperGameState::TapperGameState()
 	patronSpawnTimer = patronSpawnInterval;
 }
 
+void TapperGameState::InsertPatronOrdered(std::deque<Patron *> & deque, Patron *& patron)
+{
+	for (auto it = deque.begin(); it != deque.end();  ++it)
+	{
+		if (patron->position.x > patron->position.x)
+		{
+			deque.insert(it, patron);
+			return;
+		}
+	}
+
+	// not anywhere before the end, so add it to the end
+	deque.push_back(patron);
+}
+
 void TapperGameState::OnUpdate()
 {
 	// player movement
@@ -25,35 +40,100 @@ void TapperGameState::OnUpdate()
 	indxDelta += IsKeyPressed(KEY_DOWN) ? +1 : 0;
 
 	playerLocation += indxDelta;
-	playerLocation = Clamp(playerLocation, 0, 3);
+	playerLocation = Clamp(playerLocation, 0, LANE_COUNT-1);
 
 	// rootbeer spawning
 	if (IsKeyPressed(KEY_SPACE))
 	{
-		rbeers.push_back(new RBeer());
-		rbeers[rbeers.size() - 1]->position = grid.GetWorldPosition(lanes[playerLocation].GetEndPosition());
+		lanesBeers[playerLocation].push_back(new RBeer());
+		lanesBeers[playerLocation][lanesBeers[playerLocation].size() - 1]->position = grid.GetWorldPosition(lanes[playerLocation].GetEndPosition());
 	}
 
 	// patron spawning
 	patronSpawnTimer -= GetFrameTime();
 	if (patronSpawnTimer <= 0.0f)
 	{
-		patrons.push_back(new Patron());
-		patrons.back()->position = grid.GetWorldPosition(lanes[GetRandomValue(0, LANE_COUNT)].position);
+		int targetLane = GetRandomValue(0, LANE_COUNT-1);
+
+		lanesPatrons[targetLane].push_back(new Patron(this));
+		lanesPatrons[targetLane].back()->position = grid.GetWorldPosition(lanes[targetLane].position);
 
 		patronSpawnTimer += patronSpawnInterval;
 	}
 
-	// rootbeer movement
-	for (auto & rbeer : rbeers)
+	// patron movement
+	for (auto & laneOfPatrons : lanesPatrons)
 	{
-		rbeer->Update();
+		for (auto & patron : laneOfPatrons)
+		{
+			patron->Update();
+		}
 	}
 
-	// patron movement
-	for (auto & patron : patrons)
+	// rootbeer movement
+	for (auto & laneOfBeers : lanesBeers)
 	{
-		patron->Update();
+		for (auto & rbeer : laneOfBeers)
+		{
+			rbeer->Update();
+		}
+	}
+
+	// Drink-Patron "Collision" Detection
+	// iterate over every lane ...
+	for (int curLane = 0; curLane < LANE_COUNT; ++curLane)
+	{
+		// test against patrons in this lane
+		if (lanesBeers[curLane].size() > 0 && lanesPatrons[curLane].size() > 0 &&
+			lanesBeers[curLane].front()->position.x < lanesPatrons[curLane].front()->position.x)
+		{
+			// drink reached customer!
+
+			// - stage their beer for return (TODO: implement chance!)
+			// lanesBeers[curLane].front()->speed *= -1;
+			// 
+			// lanesReturnBeers[curLane].push_back(lanesBeers[curLane].front());
+			// lanesBeers[curLane].pop_front();
+			delete lanesBeers[curLane].front();
+			lanesBeers[curLane].pop_front();
+
+			// - stage patron for return
+			lanesPatrons[curLane].front()->Serve();
+
+			lanesReturnPatrons[curLane].push_back(lanesPatrons[curLane].front());
+			lanesPatrons[curLane].pop_front();
+		}
+	}
+	
+	// Update Satisfied Patrons
+	for (int lane = 0; lane < LANE_COUNT; ++lane)
+	{
+		std::vector<Patron *> removeQueue;
+		for (int i = 0; i < lanesReturnPatrons[lane].size(); ++i)
+		{
+			lanesReturnPatrons[lane][i]->Update();
+			if (lanesReturnPatrons[lane][i]->IsReadyToThirst())
+			{
+				InsertPatronOrdered(lanesPatrons[lane], lanesReturnPatrons[lane][i]);
+				removeQueue.push_back(lanesReturnPatrons[lane][i]);
+			}
+		}
+
+		for (auto & removedPatron : removeQueue)
+		{
+			auto it = std::find(lanesReturnPatrons[lane].begin(), lanesReturnPatrons[lane].end(), removedPatron);
+			lanesReturnPatrons[lane].erase(it);
+		}
+	}
+
+
+	// Update Return Rbeers
+	for (auto & laneOfBeers : lanesReturnBeers)
+	{
+		for (auto & rbeer : laneOfBeers)
+		{
+			rbeer->Update();
+		}
 	}
 }
 
@@ -61,14 +141,40 @@ void TapperGameState::OnDraw()
 {
 	grid.DrawDebugLines();
 	
-	for (auto & rbeer : rbeers)
+	// patron movement
+	for (auto & laneOfPatrons : lanesPatrons)
 	{
-		rbeer->Draw();
+		for (auto & patron : laneOfPatrons)
+		{
+			patron->Draw();
+		}
 	}
 
-	for (auto & patron : patrons)
+	// rootbeer movement
+	for (auto & laneOfBeers : lanesBeers)
 	{
-		patron->Draw();
+		for (auto & rbeer : laneOfBeers)
+		{
+			rbeer->Draw();
+		}
+	}
+
+	// return patron movement
+	for (auto & laneOfPatrons : lanesReturnPatrons)
+	{
+		for (auto & patron : laneOfPatrons)
+		{
+			patron->Draw();
+		}
+	}
+
+	// return rootbeer movement
+	for (auto & laneOfBeers : lanesReturnBeers)
+	{
+		for (auto & rbeer : laneOfBeers)
+		{
+			rbeer->Draw();
+		}
 	}
 
 	DrawCircleV(grid.GetWorldPosition(lanes[playerLocation].GetEndPosition()), 10.0f, raylib::Color::Blue());
